@@ -3,7 +3,8 @@
  * Game picker. Vertically centered so it isn't top-heavy on tall screens.
  * Enabled cards lift on desktop hover (.pt-card); coming-soon games render
  * greyed with a "Soon" badge and a lock, and tapping them surfaces a toast
- * (handled by App's `onPlay`/`go`).
+ * (handled by App's `onPlay`/`go`). The Roster sits a bit lower in a quieter
+ * style — it's a reference/tool, not a game.
  */
 
 import { useTranslations, type Lang } from "../../i18n/translations";
@@ -33,7 +34,7 @@ export default function HomeScreen({
 
   return (
     <div style={{ display: "flex", flexDirection: "column", flexGrow: 1, minHeight: 0 }}>
-      
+
       {/* Vertically centered container for games. minHeight: 0 keeps it from expanding arbitrarily */}
       <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", flexGrow: 1, minHeight: 0 }}>
         {GAMES.map((g) => {
@@ -85,16 +86,66 @@ export default function HomeScreen({
             </button>
           );
         })}
+
+        {/* Roster — same shape as the game cards so it sits in the family; the neutral
+            icon tint and the separation above are what mark it as a reference tool. */}
+        <button
+          onClick={() => onPlay("roster")}
+          className="pt-card"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 16,
+            padding: "1rem",
+            borderRadius: 16,
+            background: "var(--color-background-primary)",
+            border: "1px solid var(--color-border-tertiary)",
+            textAlign: "left",
+            width: "100%",
+            cursor: "pointer",
+            marginTop: 16,
+          }}
+        >
+          <div style={{
+            width: 48, height: 48, borderRadius: 12, background: "#a1a1aa22",
+            display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, flexShrink: 0,
+          }}>
+            📋
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontWeight: 500, fontSize: 15 }}>{t.app.roster}</div>
+            <div style={{ fontSize: 13, color: "var(--color-text-secondary)", marginTop: 2 }}>
+              {t.roster.desc}
+            </div>
+          </div>
+          <span style={{ color: "var(--color-text-tertiary)", fontSize: 18 }} aria-hidden>›</span>
+        </button>
       </div>
 
-      {/* Footer is pushed to the bottom of this flex container.
-          Thanks to the 7rem padding in App.tsx, it stops perfectly above the GlassMenu.
-          flexShrink: 0 prevents it from being crushed on very small screens. */}
-      <div style={{ marginTop: "auto", padding: "1rem", background: "var(--color-background-secondary)", borderRadius: 12, flexShrink: 0 }}>
-        <div style={{ fontSize: 12, color: "var(--color-text-secondary)" }}>
-          {t.app.footer || "PokéTrainer — All rights reserved."}
-        </div>
-      </div>
+      {/* Footer — pinned to the bottom (marginTop:auto). A thin hairline + centered,
+          muted text instead of a filled grey slab, to match the dark minimal-luxury
+          look. flexShrink:0 keeps it from being squeezed on short screens. */}
+      <footer
+        style={{
+          marginTop: "auto",
+          flexShrink: 0,
+          paddingTop: "0.875rem",
+          borderTop: "1px solid var(--color-border-tertiary)",
+        }}
+      >
+        <p
+          style={{
+            margin: 0,
+            textAlign: "center",
+            fontSize: 11,
+            lineHeight: 1.5,
+            letterSpacing: "0.02em",
+            color: "var(--color-text-tertiary)",
+          }}
+        >
+          {t.app.footer}
+        </p>
+      </footer>
 
     </div>
   );

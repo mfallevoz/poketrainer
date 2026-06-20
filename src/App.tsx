@@ -17,8 +17,9 @@ import HomeScreen from "./views/screens/HomeScreen";
 import SpeedGameScreen from "./views/screens/SpeedGameScreen";
 import HPGameScreen from "./views/screens/HPGameScreen";
 import TypeGameScreen from "./views/screens/TypeGameScreen";
+import RosterScreen from "./views/screens/RosterScreen";
 
-export type GameId = "home" | "speed" | "hp" | "type";
+export type GameId = "home" | "speed" | "hp" | "type" | "roster";
 
 /** Games not shippable yet — greyed out; tapping shows a "coming soon" toast. */
 export const COMING_SOON: GameId[] = ["hp"];
@@ -31,6 +32,7 @@ const GAME_SCREENS: Record<Exclude<GameId, "home">, ComponentType<GameScreenProp
   speed: SpeedGameScreen,
   hp: HPGameScreen,
   type: TypeGameScreen,
+  roster: RosterScreen,
 };
 
 export default function App() {
@@ -58,25 +60,29 @@ export default function App() {
       style={{
         maxWidth: "var(--game-max-width, 440px)",
         margin: "0 auto",
-        padding: "1.5rem 1rem 7rem", // RESTORED: 7rem bottom padding reserves space for the fixed GlassMenu
-        boxSizing: "border-box",     // CRITICAL: Ensures padding is part of the 100dvh, preventing overflow
+        padding: "1.5rem 1rem 0",    // bottom inset moved to the main wrapper (per-screen)
+        boxSizing: "border-box",     // CRITICAL: keeps padding inside the 100dvh, preventing overflow
         height: "100dvh",            // Strict viewport height
         maxHeight: "100dvh",
         display: "flex",
         flexDirection: "column",
-        overflow: "hidden",          // Strictly prevents global scrolling
+        overflow: "hidden",          // Strictly prevents global scrolling (screens scroll internally)
       }}
     >
       <AppHeader lang={lang} onSetLang={setLang} />
 
-      {/* Main Area Wrapper: minHeight: 0 prevents flex children from blowing out the layout */}
-      <div 
-        style={{ 
-          flex: 1, 
-          display: "flex", 
+      {/* Main area wrapper: minHeight:0 prevents flex children from blowing out the layout.
+          Every screen keeps a 7rem bottom gap so nothing slips under the GlassMenu —
+          except the roster, which scrolls its content behind the bar (iOS-style) and
+          reserves that gap internally instead. */}
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
           flexDirection: "column",
           overflow: "hidden",
           minHeight: 0,              // CRITICAL: prevents nested flex overflow
+          paddingBottom: activeGame === "roster" ? 0 : "7rem",
         }}
       >
         {Screen ? (

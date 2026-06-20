@@ -13,7 +13,8 @@ const ITEMS: { id: GameId; icon: string; label: Record<Lang, string> }[] = [
   { id: "home",  icon: "🏠", label: { en: "Home",  fr: "Accueil" } },
   { id: "speed", icon: "⚡", label: { en: "Speed", fr: "Vitesse" } },
   { id: "hp",    icon: "❤️", label: { en: "OHKO",  fr: "OHKO" } },
-  { id: "type",  icon: "🎯", label: { en: "Types", fr: "Types" } },
+  { id: "type",   icon: "🎯", label: { en: "Types",  fr: "Types"  } },
+  { id: "roster", icon: "📋", label: { en: "Roster", fr: "Roster" } },
 ];
 
 export default function GlassMenu({

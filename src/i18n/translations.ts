@@ -1,10 +1,3 @@
-/**
- * I18N — Translations (typed)
- * `en` defines the canonical shape; `fr` is type-checked against it, so a
- * missing or misnamed key won't compile. useTranslations returns the fully
- * typed object — `t.speedGame.title` is a `string`, never `any`.
- */
-
 export type Lang = "en" | "fr";
 
 const en = {
@@ -16,9 +9,13 @@ const en = {
     footer: "Data via PokéAPI · Roster: Pokémon Champions Regulation M-B",
     comingSoon: "Coming soon",
     soon: "Soon",
+    roster: "Roster",
+    search: "Search Pokémon...",
+    loading: "Loading..."
   },
   nav: { back: "← Back" },
   score: { score: "Score", streak: "Streak", best: "Best" },
+  stats: { hp: "HP", atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe" },
   speedGame: {
     title: "Speed Duel",
     desc: "Which Pokémon is faster?",
@@ -29,56 +26,62 @@ const en = {
     next: "Next duel",
     tied: "It's a tie!",
     loading: "Loading Pokémon…",
-    tieExplain: (speed: number) =>
-      `Speed tie — both ${speed}. Turn order is a 50/50 coin flip.`,
-    gapExplain: (tiers: number, gap: number) =>
-      `${tiers} tier${tiers > 1 ? "s" : ""} apart (${gap} points).`,
+    tieExplain: (speed: number) => `Speed tie — both ${speed}. Turn order is a 50/50 coin flip.`,
+    gapExplain: (tiers: number, gap: number) => `${tiers} tier${tiers > 1 ? "s" : ""} apart (${gap} points).`,
   },
   hpGame: {
     title: "OHKO",
-    desc: "Who scores the one-hit KO?",
-    instruction: "Tap the tankiest Pokémon!",
+    desc: "Who has more HP?",
+    instruction: "Tap the sturdiest Pokémon!",
     statLabel: "HP",
     correct: "Correct!",
     wrong: "Wrong!",
-    next: "Next battle",
+    next: "Next duel",
     tied: "It's a tie!",
     loading: "Loading Pokémon…",
     tieExplain: (hp: number) => `Same HP (${hp}).`,
-    gapExplain: (gap: number) =>
-      `${gap} HP apart — raw bulk only; defenses matter too.`,
+    gapExplain: (gap: number) => `${gap} HP difference.`,
   },
   typeGame: {
     title: "Type Chart",
-    desc: "Which type is super effective?",
-    question: (type: string) => `Which type is super effective against ${type}?`,
-    hint: "Pick its weakness — ×2 damage",
-    pick: "your pick",
+    desc: "What is super effective?",
+    question: (type: string) => `What type is super effective against ${type}?`,
+    hint: "Find its weakness — 2x damage",
+    pick: "your choice",
     correct: "Super effective!",
-    wrong: "Not very effective…",
-    answerPrefix: "Answer:",
-    next: "Next question",
-    loading: "Loading…",
+    wrong: "Not very effective...",
+    next: "Next type",
+    loading: "Loading...",
+  },
+  roster: {
+    all: "All",
+    pokemon: "Pokémon",
+    mega: "Mega",
+    empty: "No Pokémon found",
+    progress: (loaded: number, total: number) => `${loaded} / ${total} loaded…`,
+    desc: "Browse the full roster",
   },
 };
-
-export type Translations = typeof en;
 
 const fr: Translations = {
   app: {
     title: "PokéTrainer",
-    subtitle: "Maîtrise le Pokémon compétitif",
-    tagline: "Entraîne tes réflexes, un duel à la fois.",
+    subtitle: "Maîtrise la stratégie Pokémon",
+    tagline: "Entraîne tes réflexes, duel après duel.",
     selectGame: "Choisis un défi",
-    footer: "Données via PokéAPI · Roster : Pokémon Champions Règlement M-B",
+    footer: "Données via PokéAPI · Roster: Pokémon Champions Régulation M-B",
     comingSoon: "Bientôt disponible",
     soon: "Bientôt",
+    roster: "Roster",
+    search: "Chercher un Pokémon...",
+    loading: "Chargement..."
   },
   nav: { back: "← Retour" },
-  score: { score: "Score", streak: "Série", best: "Meilleur" },
+  score: { score: "Score", streak: "Série", best: "Record" },
+  stats: { hp: "PV", atk: "Atk", def: "Def", spa: "Atk.S", spd: "Def.S", spe: "Vit" },
   speedGame: {
-    title: "Duel de Vitesse",
-    desc: "Quel Pokémon est le plus rapide ?",
+    title: "Vitesse",
+    desc: "Lequel est le plus rapide ?",
     instruction: "Clique sur le plus rapide !",
     statLabel: "Vitesse",
     correct: "Correct !",
@@ -86,43 +89,42 @@ const fr: Translations = {
     next: "Prochain duel",
     tied: "Égalité !",
     loading: "Chargement…",
-    tieExplain: (speed: number) =>
-      `Égalité de vitesse — ${speed} des deux côtés. L'ordre se joue à pile ou face (50/50).`,
-    gapExplain: (tiers: number, gap: number) =>
-      `${tiers} palier${tiers > 1 ? "s" : ""} d'écart (${gap} points).`,
+    tieExplain: (speed: number) => `Égalité de vitesse — ${speed} des deux côtés.`,
+    gapExplain: (tiers: number, gap: number) => `${tiers} palier${tiers > 1 ? "s" : ""} d'écart (${gap} points).`,
   },
   hpGame: {
     title: "OHKO",
-    desc: "Qui met KO en un coup ?",
+    desc: "Qui a le plus de PV ?",
     instruction: "Clique sur le plus solide !",
     statLabel: "PV",
     correct: "Correct !",
     wrong: "Raté !",
-    next: "Prochain combat",
+    next: "Prochain duel",
     tied: "Égalité !",
     loading: "Chargement…",
     tieExplain: (hp: number) => `Mêmes PV (${hp}).`,
-    gapExplain: (gap: number) =>
-      `${gap} PV d'écart — c'est la masse brute ; les défenses comptent aussi.`,
+    gapExplain: (gap: number) => `${gap} PV d'écart.`,
   },
   typeGame: {
     title: "Tableau des Types",
     desc: "Quel type est super efficace ?",
     question: (type: string) => `Quel type est super efficace contre ${type} ?`,
-    hint: "Trouve sa faiblesse — dégâts ×2",
+    hint: "Trouve sa faiblesse — dégâts x2",
     pick: "ton choix",
     correct: "Super efficace !",
-    wrong: "Pas très efficace…",
-    answerPrefix: "Réponse :",
-    next: "Question suivante",
-    loading: "Chargement…",
+    wrong: "Pas très efficace...",
+    next: "Suivant",
+    loading: "Chargement...",
+  },
+  roster: {
+    all: "Tous",
+    pokemon: "Pokémon",
+    mega: "Méga",
+    empty: "Aucun Pokémon trouvé",
+    progress: (loaded: number, total: number) => `${loaded} / ${total} chargés…`,
+    desc: "Parcourir le roster complet",
   },
 };
 
-const translations: Record<Lang, Translations> = { en, fr };
-
-export function useTranslations(lang: Lang): Translations {
-  return translations[lang] ?? translations.en;
-}
-
-export default translations;
+export type Translations = typeof en;
+export function useTranslations(lang: Lang) { return lang === "fr" ? fr : en; }
