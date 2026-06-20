@@ -14,23 +14,9 @@
 
 import { fetchPokemonBatch, rollShiny } from "./pokemon.model";
 import type { Matchup } from "./types";
+import rosterData from "./roster.json";
 
-export const CHAMPIONS_ROSTER: readonly string[] = [
-  // --- base species (excerpt — extend to the full M-B roster) ---
-  "venusaur", "charizard", "blastoise", "raichu", "arcanine", "alakazam",
-  "machamp", "gengar", "gyarados", "lapras", "jolteon", "snorlax",
-  "dragonite", "crobat", "espeon", "umbreon", "scizor", "heracross",
-  "skarmory", "tyranitar", "lucario", "aerodactyl", "pidgeot",
-
-  // --- regional forms (distinct slugs — can duel their base form) ---
-  "raichu-alola",
-
-  // --- mega evolutions (distinct slugs, their own stats) ---
-  "venusaur-mega", "charizard-mega-x", "charizard-mega-y", "blastoise-mega",
-  "alakazam-mega", "gengar-mega", "gyarados-mega", "scizor-mega",
-  "heracross-mega", "tyranitar-mega", "lucario-mega", "aerodactyl-mega",
-  "pidgeot-mega",
-];
+export const CHAMPIONS_ROSTER: readonly string[] = rosterData as readonly string[];
 
 function _twoDistinct<T>(pool: readonly T[]): [T, T] {
   const i = Math.floor(Math.random() * pool.length);
