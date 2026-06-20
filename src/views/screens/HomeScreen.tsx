@@ -32,25 +32,30 @@ export default function HomeScreen({
   const t = useTranslations(lang);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", minHeight: "calc(100dvh - 12rem)" }}>
-      <p style={{ color: "var(--color-text-secondary)", fontSize: 14, marginBottom: 20 }}>
-        {t.app.selectGame}
-      </p>
-
-      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+    <div style={{ display: "flex", flexDirection: "column", flexGrow: 1, minHeight: 0 }}>
+      
+      {/* Vertically centered container for games. minHeight: 0 keeps it from expanding arbitrarily */}
+      <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", flexGrow: 1, minHeight: 0 }}>
         {GAMES.map((g) => {
           const soon = comingSoon.includes(g.id);
           return (
             <button
               key={g.id}
-              className={soon ? undefined : "pt-card"}
               onClick={() => onPlay(g.id)}
+              className="pt-card"
               style={{
-                display: "flex", alignItems: "center", gap: 16, padding: "1rem 1.25rem",
+                display: "flex",
+                alignItems: "center",
+                gap: 16,
+                padding: "1rem",
+                borderRadius: 16,
                 background: "var(--color-background-primary)",
-                border: "0.5px solid var(--color-border-tertiary)",
-                borderRadius: 16, cursor: soon ? "default" : "pointer", textAlign: "left", width: "100%",
-                boxShadow: "var(--shadow-card)", opacity: soon ? 0.55 : 1,
+                border: "1px solid var(--color-border-tertiary)",
+                textAlign: "left",
+                width: "100%",
+                cursor: "pointer",
+                opacity: soon ? 0.6 : 1,
+                marginBottom: 12,
               }}
             >
               <div style={{
@@ -82,11 +87,15 @@ export default function HomeScreen({
         })}
       </div>
 
-      <div style={{ marginTop: 32, padding: "1rem", background: "var(--color-background-secondary)", borderRadius: 12 }}>
-        <div style={{ fontSize: 12, color: "var(--color-text-secondary)", lineHeight: 1.6 }}>
-          {t.app.footer}
+      {/* Footer is pushed to the bottom of this flex container.
+          Thanks to the 7rem padding in App.tsx, it stops perfectly above the GlassMenu.
+          flexShrink: 0 prevents it from being crushed on very small screens. */}
+      <div style={{ marginTop: "auto", padding: "1rem", background: "var(--color-background-secondary)", borderRadius: 12, flexShrink: 0 }}>
+        <div style={{ fontSize: 12, color: "var(--color-text-secondary)" }}>
+          {t.app.footer || "PokéTrainer — All rights reserved."}
         </div>
       </div>
+
     </div>
   );
 }

@@ -58,23 +58,39 @@ export default function App() {
       style={{
         maxWidth: "var(--game-max-width, 440px)",
         margin: "0 auto",
-        padding: "1.5rem 1rem 7rem",
-        minHeight: "100vh",
+        padding: "1.5rem 1rem 7rem", // RESTORED: 7rem bottom padding reserves space for the fixed GlassMenu
+        boxSizing: "border-box",     // CRITICAL: Ensures padding is part of the 100dvh, preventing overflow
+        height: "100dvh",            // Strict viewport height
+        maxHeight: "100dvh",
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",          // Strictly prevents global scrolling
       }}
     >
       <AppHeader lang={lang} onSetLang={setLang} />
 
-      {Screen ? (
-        <Screen lang={lang} />
-      ) : (
-        <HomeScreen lang={lang} onPlay={go} comingSoon={COMING_SOON} />
-      )}
+      {/* Main Area Wrapper: minHeight: 0 prevents flex children from blowing out the layout */}
+      <div 
+        style={{ 
+          flex: 1, 
+          display: "flex", 
+          flexDirection: "column",
+          overflow: "hidden",
+          minHeight: 0,              // CRITICAL: prevents nested flex overflow
+        }}
+      >
+        {Screen ? (
+          <Screen lang={lang} />
+        ) : (
+          <HomeScreen lang={lang} onPlay={go} comingSoon={COMING_SOON} />
+        )}
+      </div>
 
       <GlassMenu lang={lang} active={activeGame} onSelect={go} comingSoon={COMING_SOON} />
 
       {toast && (
-        <div style={{ position: "fixed", left: 0, right: 0, bottom: 96, display: "flex", justifyContent: "center", zIndex: 60, pointerEvents: "none" }}>
-          <div className="lg pt-toast" style={{ padding: "10px 18px", borderRadius: 99, fontSize: 13, fontWeight: 600, color: "var(--color-text-primary)" }}>
+        <div style={{ position: "fixed", left: "50%", transform: "translateX(-50%)", bottom: "6.5rem", zIndex: 9999, width: "calc(100% - 2rem)", maxWidth: "408px" }}>
+          <div className="pt-nav-item" style={{ background: "var(--color-background-secondary)", backdropFilter: "blur(12px)", border: "1px solid var(--color-border-secondary)", padding: "0.75rem 1rem", borderRadius: "12px", textAlign: "center", fontSize: "14px", color: "var(--color-text-primary)", boxShadow: "var(--shadow-card)" }}>
             {toast}
           </div>
         </div>
